@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/robbiew/go-doorserver/internal/server"
+	"github.com/robbiew/doorserve/internal/server"
 
-	"github.com/robbiew/go-doorserver/internal/config"
+	"github.com/robbiew/doorserve/internal/config"
 )
 
 func main() {

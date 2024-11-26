@@ -1,11 +1,11 @@
-package rlogin
+package server
 
 import (
 	"log"
 	"net"
 	"strconv"
 
-	"github.com/robbiew/go-doorserver/internal/connection"
+	"github.com/robbiew/doorserve/internal/connection"
 )
 
 // StartServer starts the RLOGIN server
