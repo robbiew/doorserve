@@ -8,7 +8,7 @@ import (
 	"github.com/robbiew/go-doorserver/pkg/connection"
 )
 
-// StartServer starts an RLOGIN server on the specified port.
+// StartServer starts the RLOGIN server
 func StartServer(port int, isDebug bool) {
 	address := ":" + strconv.Itoa(port)
 	listener, err := net.Listen("tcp", address)
@@ -34,9 +34,12 @@ func handleConnection(conn net.Conn, node int, isDebug bool) {
 	wrapper := connection.NewWrapper(conn, node, isDebug)
 
 	if isDebug {
-		wrapper.SetModule(connection.NewDebugModule())
+		wrapper.SetModule(connection.NewDebugModule()) // Assign DebugModule
 	} else {
-		wrapper.SetModule(connection.NewMenuModule())
+		// Placeholder for MenuModule
+		log.Println("Non-debug mode is not yet implemented")
+		conn.Close()
+		return
 	}
 
 	wrapper.HandleConnection()

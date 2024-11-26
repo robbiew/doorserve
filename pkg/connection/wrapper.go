@@ -5,40 +5,52 @@ import (
 	"net"
 )
 
-type Wrapper struct {
-	conn     net.Conn
-	node     int
-	isDebug  bool
-	module   Module
-	remoteIP string
+// Module defines the interface for handling input and managing connection logic
+type Module interface {
+	HandleInput(wrapper *Wrapper, input []byte)
 }
 
-// NewWrapper initializes a new Wrapper.
+// Wrapper manages a single connection and its associated module
+type Wrapper struct {
+	conn    net.Conn
+	node    int
+	isDebug bool
+	Module  Module
+	user    *User // For tracking user-specific information
+}
+
+// User represents a connected user's details
+type User struct {
+	Name string
+}
+
+// NewWrapper creates a new Wrapper instance
 func NewWrapper(conn net.Conn, node int, isDebug bool) *Wrapper {
 	return &Wrapper{
-		conn:     conn,
-		node:     node,
-		isDebug:  isDebug,
-		remoteIP: conn.RemoteAddr().String(),
+		conn:    conn,
+		node:    node,
+		isDebug: isDebug,
+		user:    &User{Name: "Guest"},
 	}
 }
 
-// SetModule assigns a module to the wrapper.
-func (w *Wrapper) SetModule(module Module) {
-	w.module = module
-}
-
-// HandleConnection processes incoming data for the connection.
+// HandleConnection reads input from the connection and passes it to the active module
 func (w *Wrapper) HandleConnection() {
-	defer w.conn.Close()
-	log.Printf("Handling connection for node %d (Debug: %v)", w.node, w.isDebug)
+	buffer := make([]byte, 1024)
 	for {
-		buf := make([]byte, 1024)
-		n, err := w.conn.Read(buf)
+		n, err := w.conn.Read(buffer)
 		if err != nil {
-			log.Printf("Connection closed for node %d", w.node)
+			log.Printf("Connection error on node %d: %v", w.node, err)
 			return
 		}
-		w.module.HandleInput(w, buf[:n])
+
+		if w.Module != nil {
+			w.Module.HandleInput(w, buffer[:n]) // Pass input to the active module
+		}
 	}
+}
+
+// SetModule assigns a module to the wrapper
+func (w *Wrapper) SetModule(module Module) {
+	w.Module = module
 }
