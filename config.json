@@ -1,0 +1,17 @@
+{
+    "port": 3513,
+    "debugPort": 3333,
+    "dosbox": {
+      "dosboxPath": "/usr/bin/dosbox",
+      "configPath": "./dosbox",
+      "drivePath": "./dosbox/drive",
+      "startPort": 10000,
+      "headless": true
+    },
+    "debugUser": {
+      "name": "DebugUser",
+      "module": "Debug",
+      "terminal": "ansi"
+    }
+  }
+  
