@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/robbiew/go-doorserver/pkg/rlogin"
+	"github.com/robbiew/go-doorserver/internal/server"
 
-	"github.com/robbiew/go-doorserver/pkg/config"
+	"github.com/robbiew/go-doorserver/internal/config"
 )
 
 func main() {
@@ -16,11 +16,11 @@ func main() {
 	}
 
 	// Start RLOGIN server
-	go rlogin.StartServer(cfg.Port, false)
+	go server.StartServer(cfg.Port, false)
 
 	// Start Debug server if configured
 	if cfg.DebugPort > 0 {
-		go rlogin.StartServer(cfg.DebugPort, true)
+		go server.StartServer(cfg.DebugPort, true)
 	}
 
 	// Keep the application running

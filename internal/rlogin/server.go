@@ -5,7 +5,7 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/robbiew/go-doorserver/pkg/connection"
+	"github.com/robbiew/go-doorserver/internal/connection"
 )
 
 // StartServer starts the RLOGIN server
